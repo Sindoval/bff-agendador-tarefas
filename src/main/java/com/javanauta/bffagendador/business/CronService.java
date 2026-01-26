@@ -1,5 +1,6 @@
 package com.javanauta.bffagendador.business;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.javanauta.bffagendador.business.dto.in.RequestUsuarioDTO;
 import com.javanauta.bffagendador.business.dto.out.ResponseTarefaDTO;
 import com.javanauta.bffagendador.infrastructure.enums.StatusNotificacaoEnum;
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class CronService {
   private String senha;
 
   @Scheduled(cron = "${cron.horario}")
-  public void buscaTarefasProximaHora() {
+  public void buscaTarefasProximaHora() throws JsonProcessingException {
     String token = login(toRequestDTO());
     log.info("Iniciada a busca por tarefas");
     LocalDateTime nextHour = LocalDateTime.now().plusHours(1);
