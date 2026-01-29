@@ -2,6 +2,7 @@ package com.javanauta.bffagendador.controller;
 
 
 import com.javanauta.bffagendador.business.UsuarioService;
+import com.javanauta.bffagendador.business.dto.ViaCepDTOResponse;
 import com.javanauta.bffagendador.business.dto.in.RequestEnderecoDTO;
 import com.javanauta.bffagendador.business.dto.in.RequestTelefoneDTO;
 import com.javanauta.bffagendador.business.dto.in.RequestUsuarioDTO;
@@ -130,5 +131,14 @@ public class UsuarioController {
   public ResponseEntity<ResponseTelefoneDTO> salvarTelefone(@RequestBody RequestTelefoneDTO telefoneDTO,
       @RequestHeader(name = "Authorization", required = false) String token) {
     return ResponseEntity.ok(usuarioService.cadastroTelefone(token, telefoneDTO));
+  }
+
+  @GetMapping("/endereco/{cep}")
+  @Operation(summary = "Buscar endereco por cep", description = "Buscar endereco via cep")
+  @ApiResponse(responseCode = "200", description = "Dados do endereco retornados com sucesso")
+  @ApiResponse(responseCode = "400", description = "CEP inválido")
+  @ApiResponse(responseCode = "500", description = "Erro de servidor")
+  public ResponseEntity<ViaCepDTOResponse> buscarEndereco(@PathVariable String cep) {
+    return ResponseEntity.ok(usuarioService.buscarEnderecoCep(cep));
   }
 }
