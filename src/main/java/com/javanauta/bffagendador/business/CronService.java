@@ -21,6 +21,7 @@ public class CronService {
   private final TarefaService tarefaService;
   private final EmailService emailService;
   private final UsuarioService usuarioService;
+  private final ObjectMapper objectMapper;
 
   @Value("${admin.email}")
   private String email;
@@ -37,7 +38,7 @@ public class CronService {
 
     List<ResponseTarefaDTO> listaTarefas = tarefaService.
         buscaTarefasAgendadasPorPeriodo(nextHour, nextHourPlusFive, token);
-    log.info("Tarefas encontradas: \n{}", new ObjectMapper()
+    log.info("Tarefas encontradas: \n{}",  objectMapper
         .writerWithDefaultPrettyPrinter()
         .writeValueAsString(listaTarefas));
     listaTarefas.forEach((tarefa) -> {

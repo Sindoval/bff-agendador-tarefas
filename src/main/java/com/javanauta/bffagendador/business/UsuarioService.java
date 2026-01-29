@@ -1,5 +1,6 @@
 package com.javanauta.bffagendador.business;
 
+import com.javanauta.bffagendador.business.dto.ViaCepDTOResponse;
 import com.javanauta.bffagendador.business.dto.in.RequestEnderecoDTO;
 import com.javanauta.bffagendador.business.dto.in.RequestTelefoneDTO;
 import com.javanauta.bffagendador.business.dto.in.RequestUsuarioDTO;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UsuarioService {
   private final UsuarioClient client;
+  private final UsuarioClient usuarioClient;
 
   public ResponseUsuarioDTO salvarUsuario(RequestUsuarioDTO usuarioDTO) {
     return client.salvarUsuario(usuarioDTO);
@@ -49,5 +51,9 @@ public class UsuarioService {
 
   public ResponseTelefoneDTO cadastroTelefone(String token, RequestTelefoneDTO telefoneDTO) {
     return client.salvarTelefone(telefoneDTO, token);
+  }
+
+  public ViaCepDTOResponse buscarEnderecoCep(String cep) {
+    return usuarioClient.buscarDadosCep(cep);
   }
 }
