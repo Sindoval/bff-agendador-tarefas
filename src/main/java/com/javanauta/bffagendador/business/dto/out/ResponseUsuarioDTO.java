@@ -18,6 +18,6 @@ public class ResponseUsuarioDTO {
   private String senha;
   private List<ResponseEnderecoDTO> enderecos;
   private List<ResponseTelefoneDTO> telefones;
-
-
+  private String emailAnterior;
+  private String novoToken;
 }
