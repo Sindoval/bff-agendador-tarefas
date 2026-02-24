@@ -45,6 +45,13 @@ public interface TarefasClient {
       @RequestParam("id") String id,
       @RequestHeader("Authorization") String token);
 
+  @PatchMapping("/email")
+  void atualizaEmailTarefas(
+      @RequestBody String newEmail,
+      @RequestParam String oldEmail,
+      @RequestHeader("Authorization") String token
+  );
+
   @PutMapping
   ResponseTarefaDTO updateTarefa(
       @RequestBody RequestTarefaDTO tarefaDTO,
