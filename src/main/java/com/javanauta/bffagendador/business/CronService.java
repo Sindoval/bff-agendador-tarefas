@@ -1,6 +1,7 @@
 package com.javanauta.bffagendador.business;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.javanauta.bffagendador.business.converter.ComunicacaoConverter;
 import com.javanauta.bffagendador.business.dto.in.RequestUsuarioDTO;
 import com.javanauta.bffagendador.business.dto.out.ResponseTarefaDTO;
 import com.javanauta.bffagendador.infrastructure.enums.StatusNotificacaoEnum;
@@ -19,9 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Slf4j
 public class CronService {
   private final TarefaService tarefaService;
-  private final EmailService emailService;
+  private final ComunicacaoService comunicacaoService;
   private final UsuarioService usuarioService;
   private final ObjectMapper objectMapper;
+  private final ComunicacaoConverter comunicacaoConverter;
 
   @Value("${admin.email}")
   private String email;
@@ -42,9 +44,13 @@ public class CronService {
         .writerWithDefaultPrettyPrinter()
         .writeValueAsString(listaTarefas));
     listaTarefas.forEach((tarefa) -> {
-      emailService.enviarEmail(tarefa);
-      log.info("Email enviado para: " + tarefa.getEmailUsuario());
-      tarefaService.alteraStatus(StatusNotificacaoEnum.NOTIFICADO, tarefa.getId(), token);
+      try {
+        comunicacaoService.enviarEmail(comunicacaoConverter.toComunicacaoDTO(tarefa));
+        log.info("Comunicação agendada com sucesso para: " + tarefa.getEmailUsuario());
+        tarefaService.alteraStatus(StatusNotificacaoEnum.NOTIFICADO, tarefa.getId(), token);
+      } catch (Exception e) {
+        log.error("Falha ao processar tarefa {}: {}", tarefa.getId(), e.getMessage());
+      }
     });
 
     log.info("Finalizada a busca e notificaćão de tarefas");
